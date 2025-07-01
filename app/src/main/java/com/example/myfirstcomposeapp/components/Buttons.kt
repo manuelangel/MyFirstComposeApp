@@ -56,7 +56,7 @@ fun MyButtons(modifier: Modifier) {
 
 @Composable
 fun MyFAB(modifier: Modifier = Modifier) {
-    FloatingActionButton(onClick = {}) {
+    FloatingActionButton(onClick = {}, contentColor = Color.White, containerColor = Color.Green) {
         Icon(painter = painterResource(R.drawable.baseline_airline_seat_recline_normal_24), contentDescription = "Floating action button")
     }
 }

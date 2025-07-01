@@ -1,5 +1,6 @@
 package com.example.myfirstcomposeapp.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -14,8 +15,9 @@ import com.example.myfirstcomposeapp.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyTopAppBar(modifier: Modifier = Modifier) {
+fun MyTopAppBar(modifier: Modifier = Modifier, onNavSelected: ()->Unit) {
     TopAppBar(
+        modifier = modifier.clickable(true){onNavSelected()},
         title = { Text("My App") },
         navigationIcon = {
             Icon(

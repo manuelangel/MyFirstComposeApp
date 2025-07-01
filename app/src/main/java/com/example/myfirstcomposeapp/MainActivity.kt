@@ -7,47 +7,24 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import com.example.myfirstcomposeapp.components.MyButtons
-import com.example.myfirstcomposeapp.components.MyDropDownItem
-import com.example.myfirstcomposeapp.components.MyDropDownMenu
-import com.example.myfirstcomposeapp.components.MyExposedDropDownMenu
 import com.example.myfirstcomposeapp.components.MyFAB
-import com.example.myfirstcomposeapp.components.MyIcon
-import com.example.myfirstcomposeapp.components.MyImage
-import com.example.myfirstcomposeapp.components.MyNetworkImage
-import com.example.myfirstcomposeapp.components.MyProgress
-import com.example.myfirstcomposeapp.components.MyProgressAdvance
-import com.example.myfirstcomposeapp.components.MyRangeSlider
-import com.example.myfirstcomposeapp.components.MySlider
-import com.example.myfirstcomposeapp.components.MySliderAdvance
-import com.example.myfirstcomposeapp.components.MyTextField
-import com.example.myfirstcomposeapp.components.MyTextFieldParent
-import com.example.myfirstcomposeapp.components.MyTexts
+import com.example.myfirstcomposeapp.components.MyModalDrawer
+import com.example.myfirstcomposeapp.components.MyNavigationBar
 import com.example.myfirstcomposeapp.components.MyTopAppBar
-import com.example.myfirstcomposeapp.components.ProgressAnimation
-import com.example.myfirstcomposeapp.components.challenges.ChallengeOne
-import com.example.myfirstcomposeapp.components.challenges.ChallengeTwo
-import com.example.myfirstcomposeapp.components.layouts.ConstraintBarrier
-import com.example.myfirstcomposeapp.components.layouts.ConstraintChain
-import com.example.myfirstcomposeapp.components.layouts.ConstraintExampleGuide
-import com.example.myfirstcomposeapp.components.layouts.MyBasicConstraintLayout
-import com.example.myfirstcomposeapp.components.layouts.MyBox
-import com.example.myfirstcomposeapp.components.layouts.MyColumn
-import com.example.myfirstcomposeapp.components.layouts.MyComplexLayout
-import com.example.myfirstcomposeapp.components.layouts.MyRow
-import com.example.myfirstcomposeapp.state.MyState
 import com.example.myfirstcomposeapp.ui.theme.MyFirstComposeAppTheme
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,22 +32,27 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MyFirstComposeAppTheme {
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    topBar = { MyTopAppBar() },
-                    floatingActionButton = { MyFAB() },
-                    floatingActionButtonPosition = FabPosition.End
-                ) { innerPadding ->
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(innerPadding)
-                            .background(Color.Cyan),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text("Esta es mi screen")
+                val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+                val scope = rememberCoroutineScope()
+                MyModalDrawer(content = {
+                    Scaffold(
+                        modifier = Modifier.fillMaxSize(),
+                        topBar = { MyTopAppBar { scope.launch { drawerState.open() } } },
+                        floatingActionButton = { MyFAB() },
+                        floatingActionButtonPosition = FabPosition.End,
+                        bottomBar = { MyNavigationBar() }
+                    ) { innerPadding ->
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(innerPadding)
+                                .background(Color.Cyan),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text("Esta es mi screen")
+                        }
                     }
-                }
+                }, drawerState = drawerState)
             }
         }
     }
