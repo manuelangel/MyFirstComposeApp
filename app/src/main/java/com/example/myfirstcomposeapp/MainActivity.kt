@@ -14,15 +14,27 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.myfirstcomposeapp.components.MyBadgeBox
+import com.example.myfirstcomposeapp.components.MyCard
+import com.example.myfirstcomposeapp.components.MyCustomDialog
+import com.example.myfirstcomposeapp.components.MyDateDialog
+import com.example.myfirstcomposeapp.components.MyDialog
+import com.example.myfirstcomposeapp.components.MyDivider
 import com.example.myfirstcomposeapp.components.MyFAB
 import com.example.myfirstcomposeapp.components.MyModalDrawer
 import com.example.myfirstcomposeapp.components.MyNavigationBar
+import com.example.myfirstcomposeapp.components.MyTimePicker
 import com.example.myfirstcomposeapp.components.MyTopAppBar
+import com.example.myfirstcomposeapp.components.model.PokemonCombat
 import com.example.myfirstcomposeapp.ui.theme.MyFirstComposeAppTheme
 import kotlinx.coroutines.launch
 
@@ -34,23 +46,26 @@ class MainActivity : ComponentActivity() {
             MyFirstComposeAppTheme {
                 val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
                 val scope = rememberCoroutineScope()
+                var showDialog by remember { mutableStateOf(false) }
+                val pokemonCombat = PokemonCombat("Pikachu", "Raichu")
+
+                MyCustomDialog(
+                    showDialog = showDialog,
+                    pokemonCombat = pokemonCombat,
+                    onDismissDialog = { showDialog = false })
+
                 MyModalDrawer(content = {
                     Scaffold(
                         modifier = Modifier.fillMaxSize(),
                         topBar = { MyTopAppBar { scope.launch { drawerState.open() } } },
-                        floatingActionButton = { MyFAB() },
+                        floatingActionButton = { MyFAB(onClick = { showDialog = true }) },
                         floatingActionButtonPosition = FabPosition.End,
                         bottomBar = { MyNavigationBar() }
                     ) { innerPadding ->
-                        Box(
+                        MyDivider(
                             modifier = Modifier
-                                .fillMaxSize()
                                 .padding(innerPadding)
-                                .background(Color.Cyan),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text("Esta es mi screen")
-                        }
+                        )
                     }
                 }, drawerState = drawerState)
             }
